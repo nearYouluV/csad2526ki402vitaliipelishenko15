@@ -1,0 +1,26 @@
+PROMT1: 
+create and fill cmake file for me
+
+ANSWER: 
+I'll create a CMakeLists.txt file for your C++ project. Based on your workspace structure, I can see you have a simple C++ project with a main.cpp file.
+
+Created CMakeLists.txt
+
+I've created a comprehensive CMakeLists.txt file for your C++ project. Here's what it includes:
+
+Key Features:
+Minimum CMake version: 3.10 (widely compatible)
+Project name: "HelloWorld" (matching your simple hello world program)
+C++ Standard: C++17 (modern and widely supported)
+Compiler flags:
+Debug mode: -g -Wall -Wextra (debugging info + warnings)
+Release mode: -O3 -DNDEBUG (optimized)
+Default build type: Debug (if not specified)
+Executable target: Creates an executable from your main.cpp
+Output directory: Places the executable in build/bin/ for organization
+How to use:
+Create a build directory: mkdir build && cd build
+Generate build files: cmake ..
+Build the project: make or cmake --build .
+Run the executable: ./bin/HelloWorld
+This CMakeLists.txt file is structured to be easily extensible if you add more source files or dependencies to your project later.
