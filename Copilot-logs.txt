@@ -24,3 +24,112 @@ Generate build files: cmake ..
 Build the project: make or cmake --build .
 Run the executable: ./bin/HelloWorld
 This CMakeLists.txt file is structured to be easily extensible if you add more source files or dependencies to your project later.
+
+PROMT 2: 
+Could you create two files: math_operations.h and math_operations.cpp. At math_operations.h create a function int
+add(int a, int b);
+
+ANSWER 2: 
+I'll create the header file math_operations.h with the add function declaration and the corresponding implementation file math_operations.cpp.
+
+Created math_operations.h
+
+Created math_operations.cpp
+
+Now I'll update the CMakeLists.txt file to include the new source file in the build:
+
+CMakeLists.txt+1-1
+Perfect! I've created both files:
+
+math_operations.h
+Contains the function declaration int add(int a, int b);
+Uses proper header guards to prevent multiple inclusions
+Includes a descriptive comment
+math_operations.cpp
+Contains the implementation of the add function
+Includes the header file
+Simple implementation that returns the sum of two integers
+Updated CMakeLists.txt
+Added math_operations.cpp to the executable target so it gets compiled and linked with your project
+Your project structure now looks like:
+main.cpp
+math_operations.h
+math_operations.cpp
+CMakeLists.txt
+README.md
+You can now use the add function in your main.cpp by including the header file: #include "math_operations.h"
+
+
+PROMT 3: 
+Great, now create a folder named as tests. And create on that folder file called: unit_tests.cpp and fill that file
+
+ANSWER 3: 
+I'll create a tests folder and add a unit_tests.cpp file with unit tests for your add function.
+
+Created tests
+
+Created unit_tests.cpp
+
+Now I'll update the CMakeLists.txt file to include a test executable:
+
+CMakeLists.txt+14-0
+Perfect! I've created the testing infrastructure for your project:
+
+Created:
+tests folder: A dedicated directory for test files
+unit_tests.cpp: Comprehensive unit tests for the add function
+Test Coverage:
+The unit tests include:
+
+✓ Positive numbers: add(5, 3) = 8
+✓ Negative numbers: add(-5, -3) = -8
+✓ Mixed numbers: add(-5, 10) = 5
+✓ Zero cases: Testing with zero as both operands
+✓ Large numbers: Testing with larger values
+Updated CMakeLists.txt:
+Added enable_testing() to enable CMake's testing framework
+Created a separate unit_tests executable
+Added the test to CMake's test suite with add_test()
+How to run tests:
+Build the project: mkdir build && cd build && cmake .. && make
+Run tests directly: ./bin/unit_tests
+Run via CMake: ctest or make test
+
+
+PROMT 4: 
+also fill README file with explanation how to run and make tests
+
+ANSWER 4: 
+
+I'll update the README.md file with comprehensive instructions on how to build, run, and test the project.
+
+README.md+105-0
+Perfect! I've updated the README.md file with comprehensive documentation that includes:
+
+What's included:
+📁 Project Structure
+Clear visualization of all files and their purposes
+🔧 Prerequisites
+Lists required tools (C++ compiler, CMake, Make)
+🏗️ Building Instructions
+Step-by-step build process
+Multiple build methods (make vs cmake --build)
+▶️ Running Instructions
+How to run the main application
+Clear executable paths
+🧪 Testing Instructions
+3 different methods to run tests:
+Direct execution of test binary
+Using CMake's ctest command
+Using make test
+Includes verbose testing options
+📊 Test Coverage Details
+Lists all test scenarios covered
+Easy to verify what's being tested
+👨‍💻 Development Guide
+How to add new functions
+Build types (Debug vs Release)
+Development workflow
+👤 Author Information
+Credits with your name
+The README now serves as a complete guide for anyone who wants to understand, build, run, or contribute to your project!
