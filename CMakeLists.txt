@@ -34,6 +34,5 @@ add_executable(unit_tests tests/unit_tests.cpp math_operations.cpp)
 set_target_properties(unit_tests PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
-
 # Add test
 add_test(NAME UnitTests COMMAND unit_tests)
