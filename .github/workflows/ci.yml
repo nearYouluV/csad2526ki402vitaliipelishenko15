@@ -78,14 +78,25 @@ jobs:
           ctest --output-on-failure -C Release
       
       # Step 6: Upload build artifacts
-      - name: Upload artifacts
+      - name: Upload artifacts (Unix)
+        if: matrix.os != 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-${{ matrix.os }}
           path: |
             build/bin/
-            build/*.exe
+          retention-days: 7
+      
+      # Step 6: Upload build artifacts (Windows)
+      - name: Upload artifacts (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
             build/Release/
+            build/Debug/
+            build/**/*.exe
           retention-days: 7
       
       # Step 7: Deploy (placeholder - customize as needed)
