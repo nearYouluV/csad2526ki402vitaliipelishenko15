@@ -3,3 +3,4 @@ hello_world
 *.exe
 a.out
 .vscode/
+build/
