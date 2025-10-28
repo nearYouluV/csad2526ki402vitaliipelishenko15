@@ -76,6 +76,10 @@ jobs:
           
           # Run tests
           ctest --output-on-failure -C Release
+          
+          # List build output for debugging
+          echo "Build directory contents:"
+          Get-ChildItem -Recurse -Include *.exe
       
       # Step 6: Upload build artifacts
       - name: Upload artifacts (Unix)
@@ -96,7 +100,10 @@ jobs:
           path: |
             build/Release/
             build/Debug/
+            build/**/Release/
+            build/**/Debug/
             build/**/*.exe
+          if-no-files-found: warn
           retention-days: 7
       
       # Step 7: Deploy (placeholder - customize as needed)
