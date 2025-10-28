@@ -132,4 +132,5 @@ Build types (Debug vs Release)
 Development workflow
 👤 Author Information
 Credits with your name
+
 The README now serves as a complete guide for anyone who wants to understand, build, run, or contribute to your project!
