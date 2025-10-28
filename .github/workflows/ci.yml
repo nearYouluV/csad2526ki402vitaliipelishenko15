@@ -27,7 +27,7 @@ jobs:
             cmake_generator: "Unix Makefiles"
             shell: bash
           - os: windows-latest
-            cmake_generator: "Visual Studio 16 2019"
+            cmake_generator: "MinGW Makefiles"
             shell: pwsh
     
     defaults:
@@ -48,7 +48,11 @@ jobs:
       # Step 3: Install build tools for Windows
       - name: Install build tools (Windows)
         if: matrix.os == 'windows-latest'
-        uses: microsoft/setup-msbuild@v1.1
+        run: |
+          # Install MinGW for Windows builds
+          choco install mingw -y
+          # Add MinGW to PATH
+          echo "C:\tools\mingw64\bin" >> $env:GITHUB_PATH
       
       # Step 4: Make ci.sh executable (Unix systems)
       - name: Make ci.sh executable
@@ -68,15 +72,9 @@ jobs:
           mkdir -Force build
           cd build
           
-          # Try Visual Studio generator first, fallback to NMake
-          echo "Trying Visual Studio generator..."
-          $vsResult = cmake .. -G "${{ matrix.cmake_generator }}" -A x64
-          if ($LASTEXITCODE -ne 0) {
-            echo "Visual Studio generator failed, trying NMake Makefiles..."
-            Remove-Item -Recurse -Force CMakeFiles -ErrorAction SilentlyContinue
-            Remove-Item CMakeCache.txt -ErrorAction SilentlyContinue
-            cmake .. -G "NMake Makefiles"
-          }
+          # Use MinGW Makefiles generator
+          echo "Using MinGW Makefiles generator..."
+          cmake .. -G "${{ matrix.cmake_generator }}"
           
           if ($LASTEXITCODE -eq 0) {
             echo "CMake configuration successful!"
