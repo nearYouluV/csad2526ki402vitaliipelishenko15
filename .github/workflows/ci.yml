@@ -27,7 +27,7 @@ jobs:
             cmake_generator: "Unix Makefiles"
             shell: bash
           - os: windows-latest
-            cmake_generator: "MinGW Makefiles"
+            cmake_generator: "MSYS Makefiles"
             shell: pwsh
     
     defaults:
@@ -51,8 +51,15 @@ jobs:
         run: |
           # Install MinGW for Windows builds
           choco install mingw -y
+          # Refresh environment to get updated PATH
+          refreshenv
+          # Set up MinGW environment variables
+          $env:CC = "gcc"
+          $env:CXX = "g++"
+          echo "CC=gcc" >> $env:GITHUB_ENV
+          echo "CXX=g++" >> $env:GITHUB_ENV
           # Add MinGW to PATH
-          echo "C:\tools\mingw64\bin" >> $env:GITHUB_PATH
+          echo "C:\ProgramData\mingw64\mingw64\bin" >> $env:GITHUB_PATH
       
       # Step 4: Make ci.sh executable (Unix systems)
       - name: Make ci.sh executable
@@ -72,9 +79,13 @@ jobs:
           mkdir -Force build
           cd build
           
-          # Use MinGW Makefiles generator
-          echo "Using MinGW Makefiles generator..."
-          cmake .. -G "${{ matrix.cmake_generator }}"
+          # Set up environment for MSYS Makefiles
+          $env:CC = "gcc"
+          $env:CXX = "g++"
+          
+          # Use MSYS Makefiles generator (compatible with Git bash environment)
+          echo "Using MSYS Makefiles generator..."
+          cmake .. -G "${{ matrix.cmake_generator }}" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
           
           if ($LASTEXITCODE -eq 0) {
             echo "CMake configuration successful!"
