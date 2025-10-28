@@ -134,3 +134,48 @@ Development workflow
 Credits with your name
 
 The README now serves as a complete guide for anyone who wants to understand, build, run, or contribute to your project!
+
+
+--- STAGE 5 ---
+
+PROMT 5: 
+I'll create a ci.sh script that builds the project and runs tests using CTest.
+
+Created ci.sh
+
+Now I'll make the ci.sh script executable:
+```
+bash
+chmod +x "/home/near_you_luv/study/lab1 /csad2226ki42vitaliipelishenko15/ci.sh"
+```
+Perfect! I've created the ci.sh script with all the requested commands. Here's what the script includes:
+
+🚀 CI/CD Script Features:
+Build Process:
+mkdir -p build - Creates build directory (with -p to avoid errors if it exists)
+cd build - Navigates to build directory
+cmake .. - Generates build files with CMake
+cmake --build . - Builds the project
+chmod +x build.sh - Makes build.sh executable (if it exists)
+Testing Process:
+ctest --output-on-failure - Runs tests using CTest with detailed output on failures
+Error handling - Script exits with error code 1 if tests fail
+Success/failure reporting - Clear visual feedback with emojis
+Additional Features:
+set -e - Script stops on any error
+Detailed logging - Each step is clearly documented
+Error handling - Proper exit codes for CI/CD integration
+Visual feedback - Clear success/failure indicators
+📝 How to use:
+```
+bash
+# Run the CI/CD script
+./ci.sh
+```
+The script will:
+
+✅ Build your entire project from scratch
+✅ Run all unit tests via CTest
+✅ Provide clear feedback on success or failure
+✅ Exit with appropriate codes for automation
+This script is perfect for continuous integration pipelines and local development testing!
