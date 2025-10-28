@@ -69,19 +69,26 @@ jobs:
           cd build
           
           # Try Visual Studio generator first, fallback to NMake
-          try {
-            echo "Trying Visual Studio generator..."
-            cmake .. -G "${{ matrix.cmake_generator }}" -A x64
-          } catch {
+          echo "Trying Visual Studio generator..."
+          $vsResult = cmake .. -G "${{ matrix.cmake_generator }}" -A x64
+          if ($LASTEXITCODE -ne 0) {
             echo "Visual Studio generator failed, trying NMake Makefiles..."
+            Remove-Item -Recurse -Force CMakeFiles -ErrorAction SilentlyContinue
+            Remove-Item CMakeCache.txt -ErrorAction SilentlyContinue
             cmake .. -G "NMake Makefiles"
           }
           
-          # Build the project
-          cmake --build . --config Release
-          
-          # Run tests
-          ctest --output-on-failure -C Release
+          if ($LASTEXITCODE -eq 0) {
+            echo "CMake configuration successful!"
+            # Build the project
+            cmake --build .
+            
+            # Run tests
+            ctest --output-on-failure
+          } else {
+            echo "CMake configuration failed!"
+            exit 1
+          }
           
           # List build output for debugging
           echo "Build directory contents:"
