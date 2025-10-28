@@ -27,7 +27,7 @@ jobs:
             cmake_generator: "Unix Makefiles"
             shell: bash
           - os: windows-latest
-            cmake_generator: "Visual Studio 17 2022"
+            cmake_generator: "Visual Studio 16 2019"
             shell: pwsh
     
     defaults:
@@ -68,8 +68,14 @@ jobs:
           mkdir -Force build
           cd build
           
-          # Generate build files with CMake
-          cmake .. -G "${{ matrix.cmake_generator }}"
+          # Try Visual Studio generator first, fallback to NMake
+          try {
+            echo "Trying Visual Studio generator..."
+            cmake .. -G "${{ matrix.cmake_generator }}" -A x64
+          } catch {
+            echo "Visual Studio generator failed, trying NMake Makefiles..."
+            cmake .. -G "NMake Makefiles"
+          }
           
           # Build the project
           cmake --build . --config Release
@@ -80,6 +86,8 @@ jobs:
           # List build output for debugging
           echo "Build directory contents:"
           Get-ChildItem -Recurse -Include *.exe
+          echo "All files in build directory:"
+          Get-ChildItem -Recurse
       
       # Step 6: Upload build artifacts
       - name: Upload artifacts (Unix)
@@ -102,6 +110,7 @@ jobs:
             build/Debug/
             build/**/Release/
             build/**/Debug/
+            build/*.exe
             build/**/*.exe
           if-no-files-found: warn
           retention-days: 7
