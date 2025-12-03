@@ -292,3 +292,57 @@ Benefits:
 ✅ Comprehensive coverage - catches all build outputs
 ✅ Maintains compatibility with existing Unix builds
 Now your GitHub Actions workflow will successfully upload artifacts from all three platforms! 🎉
+PRONT8: 
+fix the issue, here's logs: 
+CMake Error at C:/hostedtoolcache/windows/cmake/3.16.9/x64/cmake-3.16.9-win64-x64/share/cmake-3.16/Modules/CMakeMinGWFindMake.cmake:12 (message):
+  sh.exe was found in your PATH, here:
+  C:/Program Files/Git/bin/sh.exe
+  For MinGW make to work correctly sh.exe must NOT be in your path.
+  Run cmake from a shell that does not have sh.exe in your PATH.
+  If you want to use a UNIX shell, then use MSYS Makefiles.
+Call Stack (most recent call first):
+  CMakeLists.txt:4 (project)
+CMake Error: CMAKE_C_COMPILER not set, after EnableLanguage
+CMake Error: CMAKE_CXX_COMPILER not set, after EnableLanguage
+-- Configuring incomplete, errors occurred!
+CMake configuration failed!
+Error: Process completed with exit code 1.
+
+ANSWER9 :
+The issue is that Git bash's sh.exe is interfering with MinGW. Let me fix this by using MSYS Makefiles instead and properly setting up the environment.
+
+ci.yml+1-1
+ci.yml+8-1
+ci.yml+7-3
+Perfect! I've fixed the Windows build by addressing the specific issues:
+
+🔧 Fixed Windows Build Issues:
+Key Changes:
+1. Switched to MSYS Makefiles
+✅ Compatible with Git Bash: MSYS Makefiles works with sh.exe in PATH
+✅ No PATH conflicts: Designed to work with MSYS/Git Bash environment
+✅ Uses Unix-style tools: Compatible with the existing shell environment
+2. Proper Compiler Setup
+✅ Explicit compiler specification: -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+✅ Environment variables: Sets CC=gcc and CXX=g++
+✅ Persistent settings: Uses GITHUB_ENV for cross-step persistence
+3. Correct MinGW Path
+✅ Updated path: C:\ProgramData\mingw64\mingw64\bin (matches Chocolatey install location)
+✅ Environment refresh: refreshenv to pick up PATH changes
+✅ Proper integration: Works with existing Git Bash environment
+Why This Works:
+Previous Issues:
+❌ MinGW Makefiles: Conflicts with Git Bash's sh.exe
+❌ Wrong PATH: Using old MinGW path format
+❌ No compiler specification: CMake couldn't find gcc/g++
+New Solution:
+✅ MSYS Makefiles: Designed for MSYS/Git Bash environments
+✅ Explicit compilers: Direct specification of gcc/g++
+✅ Correct paths: Uses actual Chocolatey MinGW installation path
+Build Flow:
+Install MinGW via Chocolatey → C:\ProgramData\mingw64\mingw64\bin
+Set environment: CC=gcc, CXX=g++
+Configure: cmake .. -G "MSYS Makefiles" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+Build: cmake --build .
+Test: ctest --output-on-failure
+Now your Windows builds should work properly with the MSYS environment! 🎉
